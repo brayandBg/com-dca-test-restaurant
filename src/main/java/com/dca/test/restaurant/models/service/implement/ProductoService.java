@@ -1,5 +1,6 @@
 package com.dca.test.restaurant.models.service.implement;
 
+import com.dca.test.restaurant.exception.exceptions.*;
 import com.dca.test.restaurant.models.dao.IProductoDAO;
 import com.dca.test.restaurant.models.entity.Producto;
 import com.dca.test.restaurant.models.service.IProductoService;
@@ -10,37 +11,57 @@ import java.util.List;
 
 @Service
 public class ProductoService implements IProductoService {
+
     @Autowired
     private IProductoDAO dao;
 
-    private Producto producto;
+    private Producto Producto;
 
     @Override
-    public List<Producto> findAll() {
+    public List<Producto> findAll() throws TrainingResourceNoExistsException {
+        if(dao.findAll()==null) throw new TrainingResourceNoExistsException();
         return (List<Producto>) dao.findAll();
     }
 
     @Override
-    public Producto findById(long id) {
-        producto = dao.findById(id).orElse(null);
-        return producto;
+    public Producto findById(long id) throws TrainingResourceNotFoundException {
+        Producto = dao.findById(id).orElse(null);
+        if(Producto==null) throw new TrainingResourceNotFoundException();
+        return Producto;
     }
 
     @Override
-    public Producto create(Producto c) {
-        producto = findById(c.getId());
-        if(producto!=null) return null;
-        return dao.save(c);
+    public Producto create(Producto p) throws TrainingResourceNoCreateException, TrainingResourceNotFoundException, TrainingResourceFieldAlreadyExistException {
+
+        try {
+            return dao.save(p);
+        }catch (Exception e){
+            throw new TrainingResourceNoCreateException();
+        }
     }
 
     @Override
-    public Producto edit(Producto c) {
+    public Producto edit(Producto p) throws TrainingResourceNotFoundException, TrainingResourceNoUpdateException {
+        Producto = findById(p.getId());
 
-        return null;
+        Producto.setPrecio(p.getPrecio());
+        Producto.setName(p.getName());
+        Producto.setDescripcion(p.getDescripcion());
+        Producto.setCodigo(p.getCodigo());
+
+        try{
+            return dao.save(Producto);
+        }catch (Exception e){
+            throw new TrainingResourceNoUpdateException();
+        }
     }
 
     @Override
-    public void delete(Long id) {
-        dao.deleteById(id);
+    public void delete(Long id) throws TrainingResourceDeletedException {
+        try{
+            dao.deleteById(id);
+        }catch (Exception e){
+            throw new TrainingResourceDeletedException();
+        }
     }
 }

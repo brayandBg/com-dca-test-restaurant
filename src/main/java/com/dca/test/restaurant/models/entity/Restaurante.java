@@ -13,6 +13,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Table(name = "restaurantes")
 public class Restaurante implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

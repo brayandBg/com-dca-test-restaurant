@@ -19,7 +19,7 @@ import java.time.ZonedDateTime;
 public class ApiExceptionHandler {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler({TrainingResourceNotFoundException.class, TrainingResourceNotAssociateException.class})
+    @ExceptionHandler({TrainingResourceNotFoundException.class})
     @ResponseBody
     public ApiException notFoundRequestException(HttpServletRequest request, Exception e) {
         HttpStatus notFound = HttpStatus.NOT_FOUND;
@@ -36,9 +36,9 @@ public class ApiExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({Exception.class, TrainingResourceFieldAlreadyExistException.class,
-            TrainingResourceFieldInvalidException.class, MethodArgumentNotValidException.class,
-            DataIntegrityViolationException.class, TrainingResourceConstraintException.class, UnexpectedRollbackException.class,
-            ApiRequestException.class, TrainingResourceOlderException.class, TrainingResourceDeletedException.class})
+            MethodArgumentNotValidException.class,
+            DataIntegrityViolationException.class, TrainingResourceNotVentasException.class, UnexpectedRollbackException.class,
+            ApiRequestException.class, TrainingResourceDeletedException.class})
     @ResponseBody
     public ApiException badRequestException(HttpServletRequest request, Exception e) {
         HttpStatus badRequest = HttpStatus.BAD_REQUEST;
@@ -54,7 +54,6 @@ public class ApiExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    @ExceptionHandler({TrainingResourceAccessDeniedException.class})
     @ResponseBody
     public ApiException forbiddenRequestException(HttpServletRequest request, Exception e) {
         HttpStatus forbidden = HttpStatus.FORBIDDEN;
@@ -68,6 +67,5 @@ public class ApiExceptionHandler {
 
         return apiException;
     }
-
 
 }

@@ -16,11 +16,14 @@ public class Cajero implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     private static final long serialversionUID = 1l;
 
     private String name;
     @Column(name = "last_name")
+
     private String lastName;
+
     @Column(name = "num_documento", unique = true)
     private String numDocumento;
 

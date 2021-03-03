@@ -20,7 +20,10 @@ public class Producto implements Serializable{
     private static final long serialversionUID = 1l;
 
     private String name;
+
     private double precio;
+
     private String codigo;
+
     private String descripcion;
 }

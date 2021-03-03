@@ -1,6 +1,9 @@
 package com.dca.test.restaurant.models.service.implement;
 
+import com.dca.test.restaurant.exception.exceptions.*;
 import com.dca.test.restaurant.models.dao.IVentaDAO;
+import com.dca.test.restaurant.models.dao.IVentaDAO;
+import com.dca.test.restaurant.models.entity.Venta;
 import com.dca.test.restaurant.models.entity.Venta;
 
 import com.dca.test.restaurant.models.service.IVentaService;
@@ -11,31 +14,43 @@ import java.util.List;
 
 @Service
 public class VentaService implements IVentaService {
+
+    //Clase auxiliar para establecer la relación de los productos que tendra una factura
+
     @Autowired
     private IVentaDAO dao;
 
-    private Venta venta;
+    private Venta Venta;
 
     @Override
-    public List<Venta> findAll() {
+    public List<Venta> findAll() throws TrainingResourceNoExistsException {
+        if(dao.findAll()==null) throw new TrainingResourceNoExistsException();
         return (List<Venta>) dao.findAll();
     }
 
     @Override
-    public Venta findById(long id) {
-        venta = dao.findById(id).orElse(null);
-        return venta;
+    public Venta findById(long id) throws TrainingResourceNotFoundException {
+        Venta = dao.findById(id).orElse(null);
+        if(Venta==null) throw new TrainingResourceNotFoundException();
+        return Venta;
     }
 
     @Override
-    public Venta create(Venta c) {
-        venta = findById(c.getId());
-        if(venta!=null) return null;
-        return dao.save(c);
+    public Venta create(Venta v) throws TrainingResourceNoCreateException, TrainingResourceNotFoundException, TrainingResourceFieldAlreadyExistException {
+
+        try {
+            return dao.save(v);
+        }catch (Exception e){
+            throw new TrainingResourceNoCreateException();
+        }
     }
 
     @Override
-    public void delete(Long id) {
-        dao.deleteById(id);
+    public void delete(Long id) throws TrainingResourceDeletedException {
+        try{
+            dao.deleteById(id);
+        }catch (Exception e){
+            throw new TrainingResourceDeletedException();
+        }
     }
 }

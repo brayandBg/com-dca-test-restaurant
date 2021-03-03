@@ -20,9 +20,10 @@ public class Venta implements Serializable {
 
     private static final long serialversionUID = 1l;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler",})
-    Factura factura;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler","name","codigo","descripcion"})
+    Producto producto;
 
     @Column(name = "cant_product")
     private long cantProduct;
